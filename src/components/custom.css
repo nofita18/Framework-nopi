@@ -1,0 +1,78 @@
+/* RESET DASAR */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* BODY */
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #ffe4ec, #fff0f5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+/* CARD UTAMA */
+.card {
+  width: 320px;
+  padding: 25px;
+  border-radius: 20px;
+  background: #ffffff;
+  box-shadow: 0 10px 25px rgba(255, 182, 193, 0.3);
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* HOVER EFFECT */
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 30px rgba(255, 182, 193, 0.5);
+}
+
+/* FOTO */
+.foto {
+  width: 130px;
+  height: 130px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 4px solid #ffc0cb;
+  margin-bottom: 15px;
+}
+
+/* NAMA */
+h2 {
+  color: #d63384;
+  margin-bottom: 10px;
+}
+
+/* TEXT */
+p {
+  color: #555;
+  margin: 5px 0;
+  font-size: 14px;
+}
+
+/* LIST SKILL */
+ul {
+  list-style: none;
+  padding: 0;
+  margin-top: 5px;
+}
+
+ul li {
+  background: #ffe4ec;
+  color: #d63384;
+  padding: 5px 10px;
+  margin: 3px;
+  border-radius: 10px;
+  display: inline-block;
+  font-size: 12px;
+}
+
+/* SECTION SPACING */
+.card > div {
+  margin-top: 10px;
+}
