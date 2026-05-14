@@ -1,0 +1,362 @@
+[
+  {
+    "id": 1,
+    "name": "Rendang",
+    "category": "Makanan Berat",
+    "price": 30000,
+    "image": "https://www.dapurkobe.co.id/wp-content/uploads/rendang-daging.jpg",
+    "details": {
+      "origin": "Sumatera Barat",
+      "spiceLevel": "Pedas",
+      "availability": "Tersedia"
+    },
+    "chef": {
+      "name": "Chef Andi",
+      "experience": "10 Tahun",
+      "restaurant": "RM Minang Jaya"
+    },
+    "tags": ["Daging", "Pedas", "Favorit"]
+  },
+  {
+    "id": 2,
+    "name": "Gudeg",
+    "category": "Makanan Berat",
+    "price": 25000,
+    "image": "https://assets.unileversolutions.com/recipes-v3/257689-default.jpg?im=AspectCrop=(1280,532);Resize=(1280,532)",
+    "details": {
+      "origin": "Yogyakarta",
+      "spiceLevel": "Manis",
+      "availability": "Tersedia"
+    },
+    "chef": {
+      "name": "Chef Budi",
+      "experience": "8 Tahun",
+      "restaurant": "Gudeg Yu Rini"
+    },
+    "tags": ["Nangka", "Manis", "Tradisional"]
+  },
+  {
+    "id": 3,
+    "name": "Pempek",
+    "category": "Snack",
+    "price": 20000,
+    "image": "https://foto.kontan.co.id/db5EX_hQyVjb2iWhmEUUaIrjyao=/smart/filters:format(webp)/2022/02/03/2025392111.jpg",
+    "details": {
+      "origin": "Palembang",
+      "spiceLevel": "Sedang",
+      "availability": "Tersedia"
+    },
+    "chef": {
+      "name": "Chef Citra",
+      "experience": "7 Tahun",
+      "restaurant": "Pempek Asli"
+    },
+    "tags": ["Ikan", "Kuah Cuko", "Gurih"]
+  },
+  {
+    "id": 4,
+    "name": "Sate Padang",
+    "category": "Makanan Berat",
+    "price": 28000,
+    "image": "https://nibble-images.b-cdn.net/nibble/original_images/sate-padang-enak-jakarta-01.jpg?class=large",
+    "details": {
+      "origin": "Padang",
+      "spiceLevel": "Pedas",
+      "availability": "Tersedia"
+    },
+    "chef": {
+      "name": "Chef Dedi",
+      "experience": "9 Tahun",
+      "restaurant": "Sate Padang Mak Syukur"
+    },
+    "tags": ["Daging", "Kuah Kental", "Pedas"]
+  },
+  {
+    "id": 5,
+    "name": "Rawon",
+    "category": "Makanan Berat",
+    "price": 27000,
+    "image": "https://delishglobe.com/wp-content/uploads/2025/07/Rawon-Black-Beef-Soup.png",
+    "details": {
+      "origin": "Jawa Timur",
+      "spiceLevel": "Sedang",
+      "availability": "Tersedia"
+    },
+    "chef": {
+      "name": "Chef Eka",
+      "experience": "6 Tahun",
+      "restaurant": "Rawon Enak"
+    },
+    "tags": ["Daging", "Kuah Hitam", "Kluwek"]
+  },
+  {
+    "id": 6,
+    "name": "Soto Betawi",
+    "category": "Makanan Berat",
+    "price": 26000,
+    "image": "https://www.unileverfoodsolutions.co.id/dam/global-ufs/mcos/SEA/calcmenu/recipes/ID-recipes/soups/soto-betawi/main-header.jpg",
+    "details": {
+      "origin": "Jakarta",
+      "spiceLevel": "Sedang",
+      "availability": "Tersedia"
+    },
+    "chef": {
+      "name": "Chef Fajar",
+      "experience": "11 Tahun",
+      "restaurant": "Soto Betawi Bang Udin"
+    },
+    "tags": ["Santan", "Daging", "Gurih"]
+  },
+  {
+    "id": 7,
+    "name": "Ayam Betutu",
+    "category": "Makanan Berat",
+    "price": 32000,
+    "image": "https://indonesiakaya.com/wp-content/uploads/2023/04/ab_Artboard_1.jpg",
+    "details": {
+      "origin": "Bali",
+      "spiceLevel": "Pedas",
+      "availability": "Tersedia"
+    },
+    "chef": {
+      "name": "Chef Gita",
+      "experience": "9 Tahun",
+      "restaurant": "Betutu Bali"
+    },
+    "tags": ["Ayam", "Pedas", "Rempah"]
+  },
+  {
+    "id": 8,
+    "name": "Papeda",
+    "category": "Makanan Berat",
+    "price": 22000,
+    "image": "https://indonesiakaya.com/wp-content/uploads/2023/04/pakk_Artboard_1.jpg",
+    "details": {
+      "origin": "Papua",
+      "spiceLevel": "Ringan",
+      "availability": "Tersedia"
+    },
+    "chef": {
+      "name": "Chef Hani",
+      "experience": "5 Tahun",
+      "restaurant": "Papeda Nusantara"
+    },
+    "tags": ["Sagu", "Kuah Ikan", "Sehat"]
+  },
+  {
+    "id": 9,
+    "name": "Nasi Liwet",
+    "category": "Makanan Berat",
+    "price": 24000,
+    "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRS3VUcD6wZw0obWypwHZxVeycaMNHYz3RbIQ&s",
+    "details": {
+      "origin": "Solo",
+      "spiceLevel": "Sedang",
+      "availability": "Tersedia"
+    },
+    "chef": {
+      "name": "Chef Intan",
+      "experience": "6 Tahun",
+      "restaurant": "Liwet Solo"
+    },
+    "tags": ["Nasi", "Gurih", "Tradisional"]
+  },
+  {
+    "id": 10,
+    "name": "Mie Aceh",
+    "category": "Makanan Berat",
+    "price": 25000,
+    "image": "https://wiratech.co.id/wp-content/uploads/2018/10/Makanan-khas-aceh.jpg",
+    "details": {
+      "origin": "Aceh",
+      "spiceLevel": "Pedas",
+      "availability": "Tersedia"
+    },
+    "chef": {
+      "name": "Chef Joko",
+      "experience": "8 Tahun",
+      "restaurant": "Mie Aceh Mantap"
+    },
+    "tags": ["Mie", "Pedas", "Rempah"]
+  },
+  {
+    "id": 11,
+    "name": "Coto Makassar",
+    "category": "Makanan Berat",
+    "price": 27000,
+    "image": "https://static.promediateknologi.id/crop/0x0:0x0/1200x600/webp/photo/p1/142/2024/04/09/Resep-Coto-Makassar-2861129677.jpg",
+    "details": {
+      "origin": "Makassar",
+      "spiceLevel": "Sedang",
+      "availability": "Tersedia"
+    },
+    "chef": {
+      "name": "Chef Kiki",
+      "experience": "10 Tahun",
+      "restaurant": "Coto Daeng"
+    },
+    "tags": ["Daging", "Kuah", "Tradisional"]
+  },
+  {
+    "id": 12,
+    "name": "Kerak Telor",
+    "category": "Snack",
+    "price": 18000,
+    "image": "https://assets.unileversolutions.com/recipes-v2/257819.jpg",
+    "details": {
+      "origin": "Jakarta",
+      "spiceLevel": "Ringan",
+      "availability": "Tersedia"
+    },
+    "chef": {
+      "name": "Chef Lala",
+      "experience": "7 Tahun",
+      "restaurant": "Kerak Betawi"
+    },
+    "tags": ["Telur", "Gurih", "Tradisional"]
+  },
+  {
+    "id": 13,
+    "name": "Bubur Manado",
+    "category": "Makanan Berat",
+    "price": 20000,
+    "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTaYU4vUFzYIjJ9kOK5oAFkNm4wX1Xup7L1Gw&s",
+    "details": {
+      "origin": "Manado",
+      "spiceLevel": "Ringan",
+      "availability": "Tersedia"
+    },
+    "chef": {
+      "name": "Chef Maya",
+      "experience": "5 Tahun",
+      "restaurant": "Bubur Sehat"
+    },
+    "tags": ["Sayur", "Sehat", "Ringan"]
+  },
+  {
+    "id": 14,
+    "name": "Tahu Gejrot",
+    "category": "Snack",
+    "price": 15000,
+    "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ3pPtgT4tkdro5jIM13Z1dELKyL1wNqSNUOA&s",
+    "details": {
+      "origin": "Cirebon",
+      "spiceLevel": "Pedas",
+      "availability": "Tersedia"
+    },
+    "chef": {
+      "name": "Chef Nia",
+      "experience": "4 Tahun",
+      "restaurant": "Gejrot Cirebon"
+    },
+    "tags": ["Tahu", "Pedas", "Asam"]
+  },
+  {
+    "id": 15,
+    "name": "Lumpia Semarang",
+    "category": "Snack",
+    "price": 17000,
+    "image": "https://www.dapurkobe.co.id/wp-content/uploads/lumpia-basah-semarang.jpg",
+    "details": {
+      "origin": "Semarang",
+      "spiceLevel": "Ringan",
+      "availability": "Tersedia"
+    },
+    "chef": {
+      "name": "Chef Oki",
+      "experience": "6 Tahun",
+      "restaurant": "Lumpia Legit"
+    },
+    "tags": ["Rebung", "Gurih", "Snack"]
+  },
+  {
+    "id": 16,
+    "name": "Nasi Uduk",
+    "category": "Makanan Berat",
+    "price": 22000,
+    "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQdBluXcRZjYQHMbQqnSCLQ3LoWM3meJ4rIkg&s",
+    "details": {
+      "origin": "Jakarta",
+      "spiceLevel": "Sedang",
+      "availability": "Tersedia"
+    },
+    "chef": {
+      "name": "Chef Putri",
+      "experience": "9 Tahun",
+      "restaurant": "Nasi Uduk Betawi"
+    },
+    "tags": ["Nasi", "Gurih", "Santapan"]
+  },
+  {
+    "id": 17,
+    "name": "Sop Konro",
+    "category": "Makanan Berat",
+    "price": 30000,
+    "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRLSKRhWxq_tJaNBWr4Y53adVmF6y-9ONQo6Q&s",
+    "details": {
+      "origin": "Makassar",
+      "spiceLevel": "Sedang",
+      "availability": "Tersedia"
+    },
+    "chef": {
+      "name": "Chef Qori",
+      "experience": "8 Tahun",
+      "restaurant": "Konro Makassar"
+    },
+    "tags": ["Iga", "Kuah", "Gurih"]
+  },
+  {
+    "id": 18,
+    "name": "Nasi Kuning",
+    "category": "Makanan Berat",
+    "price": 23000,
+    "image": "https://www.astronauts.id/blog/wp-content/uploads/2023/12/Resep-Nasi-Kuning-Rice-Cooker-Praktis-Untuk-Pemula.jpg",
+    "details": {
+      "origin": "Manado",
+      "spiceLevel": "Sedang",
+      "availability": "Tersedia"
+    },
+    "chef": {
+      "name": "Chef Rina",
+      "experience": "7 Tahun",
+      "restaurant": "Nasi Kuning Nusantara"
+    },
+    "tags": ["Nasi", "Kunyit", "Tradisional"]
+  },
+  {
+    "id": 19,
+    "name": "Serabi",
+    "category": "Dessert",
+    "price": 12000,
+    "image": "https://awsimages.detik.net.id/community/media/visual/2021/07/09/resep-serabi-tepung-terigu.jpeg?w=650",
+    "details": {
+      "origin": "Bandung",
+      "spiceLevel": "Manis",
+      "availability": "Tersedia"
+    },
+    "chef": {
+      "name": "Chef Sari",
+      "experience": "5 Tahun",
+      "restaurant": "Serabi Bandung"
+    },
+    "tags": ["Manis", "Kelapa", "Dessert"]
+  },
+  {
+    "id": 20,
+    "name": "Es Cendol",
+    "category": "Minuman",
+    "price": 10000,
+    "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS6LJp0zgmhp81bOqYeSlEnDjLtEm1qHgEiiA&s",
+    "details": {
+      "origin": "Jawa Barat",
+      "spiceLevel": "Manis",
+      "availability": "Tersedia"
+    },
+    "chef": {
+      "name": "Chef Tono",
+      "experience": "6 Tahun",
+      "restaurant": "Cendol Segar"
+    },
+    "tags": ["Minuman", "Manis", "Segar"]
+  }
+]
