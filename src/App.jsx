@@ -1,35 +1,41 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React, { Suspense } from "react";
+import { Routes, Route, Navigate } from "react-router-dom";
+import Loading from "./components/Loading";
+import MainLayout from "./layouts/MainLayout";
+import AuthLayout from "./layouts/AuthLayout";
 
-function App() {
-  const [count, setCount] = useState(0)
+// ✅ React.lazy() — komponen di-load hanya saat dibutuhkan
+const Dashboard = React.lazy(() => import("./pages/Dashboard"));
+const Orders     = React.lazy(() => import("./pages/Orders"));
+const Services   = React.lazy(() => import("./pages/Services"));
+const Customers  = React.lazy(() => import("./pages/Customers"));
+const Login      = React.lazy(() => import("./pages/auth/Login"));
+const Register   = React.lazy(() => import("./pages/auth/Register"));
+const Forgot     = React.lazy(() => import("./pages/auth/Forgot"));
 
+export default function App() {
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>poops</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
-}
+    // ✅ Suspense — tampilkan Loading saat komponen lazy sedang di-load
+    <Suspense fallback={<Loading />}>
+      <Routes>
+        {/* ── MainLayout: sidebar + header ── */}
+        <Route element={<MainLayout />}>
+          <Route path="/"          element={<Dashboard />} />
+          <Route path="/orders"    element={<Orders />} />
+          <Route path="/services"  element={<Services />} />
+          <Route path="/customers" element={<Customers />} />
+        </Route>
 
-export default App;
+        {/* ── AuthLayout: login, register, forgot ── */}
+        <Route element={<AuthLayout />}>
+          <Route path="/login"    element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/forgot"   element={<Forgot />} />
+        </Route>
+
+        {/* Fallback */}
+        <Route path="*" element={<Navigate to="/login" replace />} />
+      </Routes>
+    </Suspense>
+  );
+}
