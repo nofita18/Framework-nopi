@@ -1,105 +1,118 @@
 import { useState } from "react";
-import { MdSearch } from "react-icons/md";
+import { 
+  FiSearch, FiFilter, FiPlus, FiEye, FiEdit2, FiTrash2, 
+  FiChevronLeft, FiChevronRight 
+} from "react-icons/fi";
 
 const ordersData = [
-  { id: "#L001", customer: "Andi Wijaya",    phone: "081234567890", service: "Cuci + Setrika", weight: "3 kg",    total: 30000,  status: "Selesai",  date: "14 Mei 2026" },
-  { id: "#L002", customer: "Sari Dewi",      phone: "082345678901", service: "Cuci Express",   weight: "2 kg",    total: 24000,  status: "Diproses", date: "14 Mei 2026" },
-  { id: "#L003", customer: "Budi Santoso",   phone: "083456789012", service: "Dry Cleaning",   weight: "1 item",  total: 35000,  status: "Menunggu", date: "13 Mei 2026" },
-  { id: "#L004", customer: "Rina Marlina",   phone: "084567890123", service: "Cuci Sepatu",    weight: "1 pasang",total: 25000,  status: "Selesai",  date: "13 Mei 2026" },
-  { id: "#L005", customer: "Hendra Putra",   phone: "085678901234", service: "Cuci Karpet",    weight: "4 m²",    total: 60000,  status: "Diproses", date: "12 Mei 2026" },
-  { id: "#L006", customer: "Dewi Lestari",   phone: "086789012345", service: "Cuci Reguler",   weight: "5 kg",    total: 35000,  status: "Selesai",  date: "12 Mei 2026" },
-  { id: "#L007", customer: "Fajar Nugroho",  phone: "087890123456", service: "Cuci Tas",       weight: "1 item",  total: 50000,  status: "Menunggu", date: "11 Mei 2026" },
-  { id: "#L008", customer: "Gita Purnama",   phone: "088901234567", service: "Cuci Boneka",    weight: "2 item",  total: 40000,  status: "Selesai",  date: "11 Mei 2026" },
-  { id: "#L009", customer: "Irwan Setiawan", phone: "089012345678", service: "Cuci Bed Cover", weight: "1 item",  total: 30000,  status: "Diproses", date: "10 Mei 2026" },
-  { id: "#L010", customer: "Jeni Kusuma",    phone: "081123456789", service: "Cuci Jas",       weight: "1 item",  total: 40000,  status: "Selesai",  date: "10 Mei 2026" },
+  { id: "345321231", customer: "Darlene Robertson", phone: "081234567890", service: "Design", designation: "UI/UX Designer", type: "Office", status: "Permanent", avatar: "https://i.pravatar.cc/150?u=1" },
+  { id: "987890345", customer: "Floyd Miles", phone: "082345678901", service: "Development", designation: "PHP Developer", type: "Office", status: "Permanent", avatar: "https://i.pravatar.cc/150?u=2" },
+  { id: "453367122", customer: "Cody Fisher", phone: "083456789012", service: "Sales", designation: "Sales Manager", type: "Office", status: "Permanent", avatar: "https://i.pravatar.cc/150?u=3" },
+  { id: "345321231", customer: "Dianne Russell", phone: "084567890123", service: "Sales", designation: "BDM", type: "Remote", status: "Permanent", avatar: "https://i.pravatar.cc/150?u=4" },
+  { id: "453677881", customer: "Savannah Nguyen", phone: "085678901234", service: "Design", designation: "Design Lead", type: "Office", status: "Permanent", avatar: "https://i.pravatar.cc/150?u=5" },
 ];
-
-const statusStyle = {
-  Selesai:  "bg-green-100 text-green-700",
-  Diproses: "bg-blue-100 text-blue-700",
-  Menunggu: "bg-yellow-100 text-yellow-700",
-};
 
 export default function Orders() {
   const [search, setSearch] = useState("");
-  const [filterStatus, setFilterStatus] = useState("");
-
-  const filtered = ordersData.filter((o) => {
-    const matchSearch =
-      o.customer.toLowerCase().includes(search.toLowerCase()) ||
-      o.id.toLowerCase().includes(search.toLowerCase()) ||
-      o.service.toLowerCase().includes(search.toLowerCase());
-    const matchStatus = filterStatus ? o.status === filterStatus : true;
-    return matchSearch && matchStatus;
-  });
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold text-gray-800">Pesanan</h1>
-        <p className="text-sm text-gray-500 mt-1">Kelola semua pesanan laundry pelanggan</p>
-      </div>
-
-      {/* Filter */}
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 flex flex-col sm:flex-row gap-3">
-        <div className="flex items-center gap-2 flex-1 bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5">
-          <MdSearch className="text-gray-400 shrink-0" size={18} />
-          <input type="text" placeholder="Cari pesanan, pelanggan..." value={search}
+    <div className="p-8 bg-white min-h-screen font-sans text-[#718096]">
+      {/* Header / Top Bar */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
+        {/* Search Bar */}
+        <div className="relative flex-1 max-w-sm">
+          <FiSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
+          <input
+            type="text"
+            placeholder="Search"
+            value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="bg-transparent text-sm outline-none text-gray-600 w-full" />
+            className="w-full pl-12 pr-4 py-3 bg-[#f9fafb] border border-gray-100 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-100 transition-all"
+          />
         </div>
-        <select value={filterStatus} onChange={(e) => setFilterStatus(e.target.value)}
-          className="bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 text-sm text-gray-600 outline-none">
-          <option value="">Semua Status</option>
-          <option value="Selesai">Selesai</option>
-          <option value="Diproses">Diproses</option>
-          <option value="Menunggu">Menunggu</option>
-        </select>
+
+        {/* Action Buttons */}
+        <div className="flex items-center gap-3">
+          <button className="flex items-center gap-2 bg-[#6344f2] hover:bg-[#5235d9] text-white px-6 py-3 rounded-xl font-medium transition-all shadow-lg shadow-purple-100">
+            <FiPlus size={20} />
+            Add New Employee
+          </button>
+          <button className="flex items-center gap-2 border border-gray-200 px-4 py-3 rounded-xl hover:bg-gray-50 transition-all">
+            <FiFilter className="text-gray-600" />
+            <span className="text-gray-700 font-medium">Filter</span>
+          </button>
+        </div>
       </div>
 
-      {/* Table */}
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+      {/* Table Container */}
+      <div className="bg-white border border-gray-100 rounded-3xl overflow-hidden shadow-sm">
         <div className="overflow-x-auto">
-          <table className="w-full text-sm">
-            <thead className="bg-gray-50 border-b border-gray-100">
-              <tr className="text-left text-gray-500 text-xs">
-                <th className="px-5 py-4 font-semibold">ID Pesanan</th>
-                <th className="px-5 py-4 font-semibold">Pelanggan</th>
-                <th className="px-5 py-4 font-semibold">Layanan</th>
-                <th className="px-5 py-4 font-semibold">Berat/Qty</th>
-                <th className="px-5 py-4 font-semibold">Total</th>
-                <th className="px-5 py-4 font-semibold">Status</th>
-                <th className="px-5 py-4 font-semibold">Tanggal</th>
+          <table className="w-full text-left">
+            <thead>
+              <tr className="text-[#a0aec0] text-sm border-b border-gray-50">
+                <th className="px-6 py-5 font-medium">Employee Name</th>
+                <th className="px-6 py-5 font-medium">Employee ID</th>
+                <th className="px-6 py-5 font-medium">Department</th>
+                <th className="px-6 py-5 font-medium">Designation</th>
+                <th className="px-6 py-5 font-medium">Type</th>
+                <th className="px-6 py-5 font-medium">Status</th>
+                <th className="px-6 py-5 font-medium">Action</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-50">
-              {filtered.map((o) => (
-                <tr key={o.id} className="hover:bg-gray-50 transition">
-                  <td className="px-5 py-4 font-mono font-semibold text-blue-600">{o.id}</td>
-                  <td className="px-5 py-4">
-                    <p className="font-medium text-gray-800">{o.customer}</p>
-                    <p className="text-xs text-gray-400">{o.phone}</p>
+              {ordersData.map((emp, index) => (
+                <tr key={index} className="hover:bg-gray-50/50 transition-colors">
+                  <td className="px-6 py-4">
+                    <div className="flex items-center gap-3">
+                      <img src={emp.avatar} alt="" className="w-10 h-10 rounded-full object-cover" />
+                      <span className="font-semibold text-[#2d3748]">{emp.customer}</span>
+                    </div>
                   </td>
-                  <td className="px-5 py-4 text-gray-600">{o.service}</td>
-                  <td className="px-5 py-4 text-gray-500">{o.weight}</td>
-                  <td className="px-5 py-4 font-semibold text-gray-800">Rp {o.total.toLocaleString("id-ID")}</td>
-                  <td className="px-5 py-4">
-                    <span className={`px-2.5 py-1 rounded-full text-xs font-medium ${statusStyle[o.status]}`}>
-                      {o.status}
+                  <td className="px-6 py-4 text-sm">{emp.id}</td>
+                  <td className="px-6 py-4 text-sm">{emp.service}</td>
+                  <td className="px-6 py-4 text-sm">{emp.designation}</td>
+                  <td className="px-6 py-4 text-sm">{emp.type}</td>
+                  <td className="px-6 py-4">
+                    <span className="px-3 py-1 bg-[#f0eaff] text-[#6344f2] text-xs font-semibold rounded-lg">
+                      {emp.status}
                     </span>
                   </td>
-                  <td className="px-5 py-4 text-gray-400 text-xs">{o.date}</td>
+                  <td className="px-6 py-4">
+                    <div className="flex items-center gap-3 text-gray-400">
+                      <button className="hover:text-purple-600 transition-colors"><FiEye size={18} /></button>
+                      <button className="hover:text-blue-600 transition-colors"><FiEdit2 size={18} /></button>
+                      <button className="hover:text-red-600 transition-colors"><FiTrash2 size={18} /></button>
+                    </div>
+                  </td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
-        {filtered.length === 0 && (
-          <div className="text-center py-12 text-gray-400">
-            <p className="text-4xl mb-2">🔍</p>
-            <p className="text-sm">Tidak ada pesanan ditemukan</p>
+
+        {/* Pagination Footer */}
+        <div className="px-6 py-5 flex items-center justify-between border-t border-gray-50 text-sm">
+          <div className="flex items-center gap-2">
+            <span className="text-gray-400">Showing</span>
+            <select className="bg-gray-50 border border-gray-200 rounded-lg px-2 py-1 outline-none">
+              <option>10</option>
+            </select>
+            <FiChevronLeft className="text-gray-300 ml-2" />
           </div>
-        )}
+          
+          <div className="text-gray-400">
+            Showing 1 to 10 out of 60 records
+          </div>
+
+          <div className="flex items-center gap-2">
+            <button className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-gray-100"><FiChevronLeft /></button>
+            <button className="w-8 h-8 flex items-center justify-center rounded-lg bg-[#6344f2] text-white font-medium">1</button>
+            <button className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-gray-100">2</button>
+            <button className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-gray-100">3</button>
+            <button className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-gray-100">4</button>
+            <button className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-gray-100"><FiChevronRight /></button>
+          </div>
+        </div>
       </div>
     </div>
   );
