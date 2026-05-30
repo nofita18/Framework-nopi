@@ -6,6 +6,7 @@ import {
   MdReceiptLong,
   MdLogout,
   MdSettings,
+  MdWidgets,
 } from "react-icons/md";
 
 const navItems = [
@@ -31,6 +32,12 @@ const navItems = [
     to: "/customers",
     label: "Pelanggan",
     icon: <MdPeople size={20} />,
+    end: false,
+  },
+  {
+    to: "/components",
+    label: "Components",
+    icon: <MdWidgets size={20} />,
     end: false,
   },
 ];

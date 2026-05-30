@@ -1,10 +1,21 @@
 import { useState } from "react";
-import { MdSearch, MdFilterList } from "react-icons/md";
-import laundryData from "../data/laundry_services.json";
+import { MdSearch, MdAdd, MdLocalLaundryService } from "react-icons/md";
+
+import laundryData  from "../data/laundry_services.json";
+import PageHeader   from "../components/PageHeader";
+import LaundryCard  from "../components/LaundryCard";
+import Button       from "../components/Button";
+import Modal        from "../components/Modal";
+import SelectField  from "../components/SelectField";
+import InputField   from "../components/InputField";
 
 export default function Services() {
-  const [search, setSearch] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState("");
+  const [search, setSearch]               = useState("");
+  const [selectedCategory, setCategory]   = useState("");
+  const [modalOpen, setModalOpen]         = useState(false);
+
+  // form state
+  const [form, setForm] = useState({ name: "", category: "", price: "", duration: "" });
 
   const allCategories = [...new Set(laundryData.map((item) => item.category))];
 
@@ -12,66 +23,109 @@ export default function Services() {
     const matchSearch =
       item.name.toLowerCase().includes(search.toLowerCase()) ||
       item.category.toLowerCase().includes(search.toLowerCase());
-    const matchCategory = selectedCategory ? item.category === selectedCategory : true;
-    return matchSearch && matchCategory;
+    const matchCat = selectedCategory ? item.category === selectedCategory : true;
+    return matchSearch && matchCat;
   });
+
+  function handleSave() {
+    // placeholder — integrasi data bisa ditambahkan
+    setModalOpen(false);
+    setForm({ name: "", category: "", price: "", duration: "" });
+  }
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold text-gray-800">Layanan Laundry</h1>
-        <p className="text-sm text-gray-500 mt-1">Kelola semua layanan yang tersedia</p>
+      <div className="flex items-start justify-between">
+        <PageHeader
+          title="Layanan Laundry"
+          subtitle="Kelola semua layanan yang tersedia"
+          breadcrumb={["Dashboard", "Layanan"]}
+        />
+        <Button type="primary" onClick={() => setModalOpen(true)}>
+          <span className="flex items-center gap-1.5">
+            <MdAdd size={18} /> Tambah Layanan
+          </span>
+        </Button>
       </div>
 
-      {/* Filter */}
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 flex flex-col sm:flex-row gap-3">
-        <div className="flex items-center gap-2 flex-1 bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5">
-          <MdSearch className="text-gray-400 shrink-0" size={18} />
-          <input type="text" placeholder="Cari layanan..." value={search}
+      {/* Filter Bar */}
+      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 flex flex-col sm:flex-row gap-3 items-center">
+        <div className="flex-1">
+          <InputField
+            placeholder="Cari layanan..."
+            value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="bg-transparent text-sm outline-none text-gray-600 w-full" />
+            icon={<MdSearch size={16} />}
+          />
         </div>
-        <div className="flex items-center gap-2 bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5">
-          <MdFilterList className="text-gray-400 shrink-0" size={18} />
-          <select value={selectedCategory} onChange={(e) => setSelectedCategory(e.target.value)}
-            className="bg-transparent text-sm outline-none text-gray-600">
-            <option value="">Semua Kategori</option>
-            {allCategories.map((cat, i) => <option key={i} value={cat}>{cat}</option>)}
-          </select>
+        <div className="w-full sm:w-52">
+          <SelectField
+            value={selectedCategory}
+            onChange={(e) => setCategory(e.target.value)}
+            options={allCategories}
+            placeholder="Semua Kategori"
+          />
         </div>
-        <p className="text-sm text-gray-400 flex items-center px-2">{filtered.length} layanan</p>
+        <span className="text-sm text-gray-400 shrink-0">{filtered.length} layanan</span>
       </div>
 
-      {/* Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
-        {filtered.map((item) => (
-          <div key={item.id}
-            className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md hover:-translate-y-0.5 transition-all duration-200">
-            <div className="relative">
-              <img src={item.image} alt={item.name} className="w-full h-40 object-cover" />
-              <span className="absolute top-3 right-3 bg-white/90 backdrop-blur text-xs font-semibold text-blue-600 px-2.5 py-1 rounded-full shadow-sm">
-                {item.category}
-              </span>
-            </div>
-            <div className="p-4">
-              <h3 className="font-bold text-gray-800">{item.name}</h3>
-              <p className="text-xs text-gray-400 mt-0.5">⏱ {item.details.duration} · {item.details.unit}</p>
-              <p className="text-xs text-gray-400">👤 {item.staff.name}</p>
-              <div className="flex items-center justify-between mt-3">
-                <p className="text-blue-600 font-bold">Rp {item.price.toLocaleString("id-ID")}</p>
-                <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full font-medium">
-                  {item.details.availability}
-                </span>
-              </div>
-              <div className="flex flex-wrap gap-1 mt-3">
-                {item.tags.map((tag, i) => (
-                  <span key={i} className="bg-blue-50 text-blue-600 text-xs px-2 py-0.5 rounded-full">{tag}</span>
-                ))}
-              </div>
-            </div>
+      {/* Cards Grid */}
+      {filtered.length > 0 ? (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+          {filtered.map((item) => (
+            <LaundryCard
+              key={item.id}
+              image={item.image}
+              name={item.name}
+              category={item.category}
+              price={item.price}
+              duration={`${item.details.duration} · ${item.details.unit}`}
+              availability={item.details.availability}
+            />
+          ))}
+        </div>
+      ) : (
+        <div className="text-center py-16 bg-white rounded-2xl border border-gray-100 text-gray-400">
+          <MdLocalLaundryService size={40} className="mx-auto mb-2 opacity-30" />
+          <p className="text-sm">Layanan tidak ditemukan</p>
+        </div>
+      )}
+
+      {/* Modal Tambah Layanan */}
+      <Modal isOpen={modalOpen} onClose={() => setModalOpen(false)} title="Tambah Layanan Baru">
+        <div className="space-y-4">
+          <InputField
+            label="Nama Layanan"
+            placeholder="cth. Cuci Express"
+            value={form.name}
+            onChange={(e) => setForm({ ...form, name: e.target.value })}
+          />
+          <SelectField
+            label="Kategori"
+            value={form.category}
+            onChange={(e) => setForm({ ...form, category: e.target.value })}
+            options={allCategories}
+            placeholder="Pilih kategori..."
+          />
+          <InputField
+            label="Harga (Rp)"
+            type="number"
+            placeholder="cth. 12000"
+            value={form.price}
+            onChange={(e) => setForm({ ...form, price: e.target.value })}
+          />
+          <InputField
+            label="Durasi"
+            placeholder="cth. 6 Jam"
+            value={form.duration}
+            onChange={(e) => setForm({ ...form, duration: e.target.value })}
+          />
+          <div className="flex gap-3 justify-end pt-2">
+            <Button type="secondary" onClick={() => setModalOpen(false)}>Batal</Button>
+            <Button type="success" onClick={handleSave}>Simpan Layanan</Button>
           </div>
-        ))}
-      </div>
+        </div>
+      </Modal>
     </div>
   );
 }
