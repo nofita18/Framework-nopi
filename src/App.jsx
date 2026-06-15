@@ -5,14 +5,17 @@ import MainLayout from "./layouts/MainLayout";
 import AuthLayout from "./layouts/AuthLayout";
 
 // ✅ React.lazy() — komponen di-load hanya saat dibutuhkan
-const Dashboard = React.lazy(() => import("./pages/Dashboard"));
+const Dashboard  = React.lazy(() => import("./pages/Dashboard"));
 const Orders     = React.lazy(() => import("./pages/Orders"));
 const Services   = React.lazy(() => import("./pages/Services"));
 const Customers  = React.lazy(() => import("./pages/Customers"));
+const Marketing  = React.lazy(() => import("./pages/Marketing"));
+const Complaints = React.lazy(() => import("./pages/Complaints"));
 const Login      = React.lazy(() => import("./pages/auth/Login"));
 const Register   = React.lazy(() => import("./pages/auth/Register"));
-const Forgot      = React.lazy(() => import("./pages/auth/Forgot"));
-const Components  = React.lazy(() => import("./pages/Components"));
+const Forgot     = React.lazy(() => import("./pages/auth/Forgot"));
+const Components = React.lazy(() => import("./pages/Components"));
+const Account    = React.lazy(() => import("./pages/Account"));
 
 export default function App() {
   return (
@@ -21,11 +24,13 @@ export default function App() {
       <Routes>
         {/* ── MainLayout: sidebar + header ── */}
         <Route element={<MainLayout />}>
-          <Route path="/"          element={<Dashboard />} />
-          <Route path="/orders"    element={<Orders />} />
-          <Route path="/services"  element={<Services />} />
-          <Route path="/customers"   element={<Customers />} />
-          <Route path="/components" element={<Components />} />
+          <Route path="/"            element={<Dashboard />}  />
+          <Route path="/orders"      element={<Orders />}     />
+          <Route path="/services"    element={<Services />}   />
+          <Route path="/customers"   element={<Customers />}  />
+          <Route path="/marketing"   element={<Marketing />}  />
+          <Route path="/complaints"  element={<Complaints />} />
+          <Route path="/components"  element={<Components />} />
         </Route>
 
         {/* ── AuthLayout: login, register, forgot ── */}
@@ -37,6 +42,7 @@ export default function App() {
 
         {/* Fallback */}
         <Route path="*" element={<Navigate to="/login" replace />} />
+        <Route path="/account" element={<Account />} />
       </Routes>
     </Suspense>
   );

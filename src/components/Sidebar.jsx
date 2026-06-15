@@ -7,40 +7,32 @@ import {
   MdLogout,
   MdSettings,
   MdWidgets,
+  MdCampaign,
+  MdSupportAgent,
 } from "react-icons/md";
 
-const navItems = [
+const navGroups = [
   {
-    to: "/",
-    label: "Dashboard",
-    icon: <MdDashboard size={20} />,
-    end: true,
+    label: "Utama",
+    items: [
+      { to: "/",          label: "Dashboard",  icon: <MdDashboard size={20} />,          end: true  },
+      { to: "/customers", label: "Pelanggan",  icon: <MdPeople size={20} />,             end: false },
+      { to: "/orders",    label: "Pesanan",    icon: <MdReceiptLong size={20} />,        end: false },
+      { to: "/services",  label: "Layanan",    icon: <MdLocalLaundryService size={20} />,end: false },
+      { to: "/marketing",  label: "Marketing",  icon: <MdCampaign size={20} />,    end: false },
+      { to: "/complaints", label: "Service",    icon: <MdSupportAgent size={20} />,end: false },
+    ],
   },
   {
-    to: "/orders",
-    label: "Pesanan",
-    icon: <MdReceiptLong size={20} />,
-    end: false,
-  },
-  {
-    to: "/services",
-    label: "Layanan",
-    icon: <MdLocalLaundryService size={20} />,
-    end: false,
-  },
-  {
-    to: "/customers",
-    label: "Pelanggan",
-    icon: <MdPeople size={20} />,
-    end: false,
-  },
-  {
-    to: "/components",
-    label: "Components",
-    icon: <MdWidgets size={20} />,
-    end: false,
+    label: "Lainnya",
+    items: [
+      { to: "/components", label: "Components", icon: <MdWidgets size={20} />, end: false },
+    ],
   },
 ];
+
+// Keep navItems for backward compat (not used now)
+const navItems = navGroups.flatMap((g) => g.items);
 
 const menuClass = ({ isActive }) =>
   `flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 ${
@@ -71,24 +63,28 @@ export default function Sidebar() {
       </div>
 
       {/* Menu */}
-      <nav className="flex-1 space-y-2">
-        {navItems.map((item) => (
-          <NavLink
-            key={item.to}
-            to={item.to}
-            end={item.end}
-            className={menuClass}
-          >
-            {item.icon}
-            <span>{item.label}</span>
-          </NavLink>
+      <nav className="flex-1 space-y-1">
+        {navGroups.map((group) => (
+          <div key={group.label} className="mb-3">
+            <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest px-4 mb-1">
+              {group.label}
+            </p>
+            {group.items.map((item) => (
+              <NavLink
+                key={item.to}
+                to={item.to}
+                end={item.end}
+                className={menuClass}
+              >
+                {item.icon}
+                <span>{item.label}</span>
+              </NavLink>
+            ))}
+          </div>
         ))}
 
         {/* Settings */}
-        <NavLink
-          to="/settings"
-          className={menuClass}
-        >
+        <NavLink to="/settings" className={menuClass}>
           <MdSettings size={20} />
           <span>Settings</span>
         </NavLink>
