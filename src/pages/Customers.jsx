@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   MdSearch, MdAdd, MdPeople, MdStar, MdLocalOffer,
   MdTrendingUp, MdClose, MdHistory, MdPhone, MdEmail,
@@ -33,6 +33,10 @@ export default function Customers() {
   const [selectedCustomer, setSelected] = useState(null);
 
   const customersData = getCustomerStats();
+
+  useEffect(() => {
+    console.log("Halaman pelanggan berhasil dibuka");
+  }, []);
 
   const filtered = customersData.filter((c) => {
     const matchSearch =

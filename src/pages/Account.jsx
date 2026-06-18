@@ -54,7 +54,7 @@ export default function Account() {
           {/* Navigasi Berfungsi dengan gaya ungu pastel */}
           <div className="hidden md:flex gap-1 bg-[#f4f1fb] p-1 rounded-xl text-sm font-medium">
             {[
-              { name: "Ringkasan", ref: ringkasanRef },
+              { name: "Home", ref: ringkasanRef },
               { name: "Voucher", ref: voucherRef },
               { name: "Riwayat", ref: riwayatRef },
               { name: "Bantuan", ref: bantuanRef }
@@ -190,6 +190,28 @@ export default function Account() {
 
         </div>
 
+        {/* BENEFIT MEMBER (Ditempatkan terpisah agar fokus) */}
+        <Card className="border-[#efecf7] shadow-sm rounded-2xl bg-white overflow-hidden">
+          <div className="p-5 bg-[#f4f1fb] border-b border-[#efecf7]">
+            <h3 className="font-bold text-base text-gray-800">Benefit Gold Member Anda</h3>
+          </div>
+          <CardContent className="p-6">
+            <div className="grid sm:grid-cols-2 gap-4">
+              {[
+                "Prioritas utama antrean pengerjaan laundry",
+                "Diskon otomatis terpotong di setiap transaksi",
+                "Mendapatkan bonus poin reward lebih besar",
+                "Akses promo kilat & eksklusif khusus member"
+              ].map((benefit, index) => (
+                <div key={index} className="flex items-center gap-3 text-sm font-medium text-gray-600">
+                  <span className="flex-shrink-0 w-5 h-5 rounded-full bg-[#f0ebfa] flex items-center justify-center text-[#7c4dff] text-xs font-bold">✓</span>
+                  <span>{benefit}</span>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+
         {/* STATISTIK */}
         <div className="grid sm:grid-cols-3 gap-5">
           {[
@@ -265,33 +287,9 @@ export default function Account() {
           </div>
         </div>
 
-        {/* BENEFIT + RIWAYAT */}
-        <div ref={riwayatRef} className="grid lg:grid-cols-12 gap-6">
-
-          {/* Benefit */}
-          <Card className="lg:col-span-5 border-[#efecf7] shadow-sm rounded-2xl bg-white overflow-hidden">
-            <div className="p-5 bg-[#f4f1fb] border-b border-[#efecf7]">
-              <h3 className="font-bold text-base text-gray-800">Benefit Gold Member Anda</h3>
-            </div>
-            <CardContent className="p-6">
-              <ul className="space-y-3.5 text-sm font-medium text-gray-600">
-                {[
-                  "Prioritas utama antrean pengerjaan laundry",
-                  "Diskon otomatis terpotong di setiap transaksi",
-                  "Mendapatkan bonus poin reward lebih besar",
-                  "Akses promo kilat & eksklusif khusus member"
-                ].map((benefit, index) => (
-                  <li key={index} className="flex items-center gap-3">
-                    <span className="flex-shrink-0 w-5 h-5 rounded-full bg-[#f0ebfa] flex items-center justify-center text-[#7c4dff] text-xs font-bold">✓</span>
-                    <span>{benefit}</span>
-                  </li>
-                ))}
-              </ul>
-            </CardContent>
-          </Card>
-
-          {/* Riwayat */}
-          <Card className="lg:col-span-7 border-[#efecf7] shadow-sm rounded-2xl bg-white overflow-hidden">
+        {/* RIWAYAT (Sekarang full-width dan murni menampilkan riwayat penyelesaian) */}
+        <div ref={riwayatRef}>
+          <Card className="border-[#efecf7] shadow-sm rounded-2xl bg-white overflow-hidden">
             <div className="p-5 bg-[#f4f1fb] border-b border-[#efecf7] flex items-center justify-between">
               <h3 className="font-bold text-base text-gray-800 flex items-center gap-2">
                 <FaHistory className="text-gray-400" /> Riwayat Penyelesaian Laundry
@@ -317,7 +315,6 @@ export default function Account() {
               ))}
             </CardContent>
           </Card>
-
         </div>
 
         {/* BANTUAN */}
@@ -346,42 +343,43 @@ export default function Account() {
           </Card>
         </div>
       </div>
+
+      {/* FOOTER */}
       <footer className="mt-16 border-t border-[#efecf7] bg-white">
-            <div className="max-w-7xl mx-auto px-6 py-10">
-                <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-                
-                {/* Kiri: Logo & Copyright */}
-                <div className="flex flex-col items-center md:items-start gap-2">
-                    <div className="flex items-center gap-2">
-                    <div className="w-6 h-6 rounded-full bg-[#7c4dff] flex items-center justify-center text-white">
-                        <MdLocalLaundryService size={12} />
-                    </div>
-                    <span className="font-bold text-sm tracking-tight text-gray-800">
-                        LaundryPro
-                    </span>
-                    </div>
-                    <p className="text-xs text-gray-400 text-center md:text-left">
-                    &copy; {new Date().getFullYear()} LaundryPro. Hak Cipta Dilindungi.
-                    </p>
+        <div className="max-w-7xl mx-auto px-6 py-10">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+            
+            {/* Kiri: Logo & Copyright */}
+            <div className="flex flex-col items-center md:items-start gap-2">
+              <div className="flex items-center gap-2">
+                <div className="w-6 h-6 rounded-full bg-[#7c4dff] flex items-center justify-center text-white">
+                  <MdLocalLaundryService size={12} />
                 </div>
-
-                {/* Kanan: Navigasi Ringkas Footer */}
-                <div className="flex flex-wrap justify-center gap-x-6 gap-y-2 text-xs font-medium text-gray-400">
-                    <a href="#kebijakan" className="hover:text-[#7c4dff] transition-colors">
-                    Kebijakan Privasi
-                    </a>
-                    <a href="#syarat" className="hover:text-[#7c4dff] transition-colors">
-                    Syarat & Ketentuan
-                    </a>
-                    <a href="#bantuan" className="hover:text-[#7c4dff] transition-colors">
-                    Pusat Bantuan
-                    </a>
-                </div>
-
-                </div>
+                <span className="font-bold text-sm tracking-tight text-gray-800">
+                  LaundryPro
+                </span>
+              </div>
+              <p className="text-xs text-gray-400 text-center md:text-left">
+                &copy; {new Date().getFullYear()} LaundryPro. Hak Cipta Dilindungi.
+              </p>
             </div>
-        </footer>
+
+            {/* Kanan: Navigasi Ringkas Footer */}
+            <div className="flex flex-wrap justify-center gap-x-6 gap-y-2 text-xs font-medium text-gray-400">
+              <a href="#kebijakan" className="hover:text-[#7c4dff] transition-colors">
+                Kebijakan Privasi
+              </a>
+              <a href="#syarat" className="hover:text-[#7c4dff] transition-colors">
+                Syarat & Ketentuan
+              </a>
+              <a href="#bantuan" className="hover:text-[#7c4dff] transition-colors">
+                Pusat Bantuan
+              </a>
+            </div>
+
+          </div>
+        </div>
+      </footer>
     </div>
-    
   );
 }
