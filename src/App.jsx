@@ -13,6 +13,8 @@ const Marketing  = React.lazy(() => import("./pages/Marketing"));
 const Complaints = React.lazy(() => import("./pages/Complaints"));
 const User       = React.lazy(() => import("./pages/User"));
 const Components = React.lazy(() => import("./pages/Components"));
+const Account    = React.lazy(() => import("./pages/Account"));
+const Guest      = React.lazy(() => import("./pages/Guest"));
 const Login      = React.lazy(() => import("./pages/auth/Login"));
 const Register   = React.lazy(() => import("./pages/auth/Register"));
 const Forgot     = React.lazy(() => import("./pages/auth/Forgot"));
@@ -42,6 +44,10 @@ export default function App() {
           <Route path="/register" element={<GuestRoute><Register /></GuestRoute>} />
           <Route path="/forgot"   element={<Forgot />} />
         </Route>
+
+        {/* Halaman publik — bisa diakses siapa saja */}
+        <Route path="/guest"   element={<Guest />} />
+        <Route path="/account" element={<Account />} />
 
         {/* Main Layout — harus login */}
         <Route element={<ProtectedRoute><MainLayout /></ProtectedRoute>}>
