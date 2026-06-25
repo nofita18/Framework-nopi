@@ -1,152 +1,116 @@
 import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
-import axios from "axios";
-import { MdVisibility, MdVisibilityOff } from "react-icons/md";
+import { Link, useNavigate } from "react-router-dom";
+import { MdEmail, MdLock, MdLogin } from "react-icons/md";
+import { userAPI } from "../../services/userAPI";
 
 export default function Login() {
   const navigate = useNavigate();
-
+  const [form, setForm]       = useState({ email: "", password: "" });
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
-
-  const [dataForm, setDataForm] = useState({
-    email: "",
-    password: "",
-  });
+  const [error, setError]     = useState("");
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-
-    setDataForm({
-      ...dataForm,
-      [name]: value,
-    });
+    setForm({ ...form, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    try {
+      setLoading(true);
+      setError("");
 
-    setLoading(true);
-    setError("");
+      // Login: cari user di tabel users (PERSIS materi P13)
+      const usersFound = await userAPI.loginUser(form.email, form.password);
 
-    axios
-      .post("https://dummyjson.com/user/login", {
-        username: dataForm.email,
-        password: dataForm.password,
-      })
-      .then((response) => {
-        if (response.status !== 200) {
-          setError(response.data.message);
-          return;
-        }
-
-        navigate("/");
-      })
-      .catch((err) => {
-        if (err.response) {
-          setError(
-            err.response.data.message ||
-              "Username atau password salah"
-          );
-        } else {
-          setError("Terjadi kesalahan");
-        }
-      })
-      .finally(() => {
-        setLoading(false);
-      });
+      if (usersFound.length > 0) {
+        // Login berhasil → simpan ke localStorage → redirect dashboard
+        const loggedInUser = usersFound[0];
+        localStorage.setItem("user", JSON.stringify(loggedInUser));
+        navigate("/", { replace: true });
+      } else {
+        setError("Email atau password salah.");
+      }
+    } catch (err) {
+      setError("Terjadi kesalahan: " + err.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <div>
-      <h2 className="text-2xl font-semibold text-gray-800 text-center mb-1">
-        Login
-      </h2>
-
-      <p className="text-sm text-gray-500 text-center mb-6">
-        Silakan masuk ke akun Anda
-      </p>
-
+    <div className="w-full">
       {error && (
-        <div className="bg-red-100 text-red-600 text-sm px-3 py-2 rounded mb-4">
-          {error}
+        <div className="mb-5 flex items-center gap-2 text-sm text-red-600 bg-red-50 border border-red-200 rounded-xl px-4 py-3">
+          <span>⚠️</span>
+          <span>{error}</span>
         </div>
       )}
 
-      <form onSubmit={handleSubmit}>
-        {/* Username */}
-        <div className="mb-4">
-          <label className="block text-sm text-gray-700 mb-2">
-            Username
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1.5">
+            Email Address
           </label>
-
-          <input
-            type="text"
-            name="email"
-            value={dataForm.email}
-            onChange={handleChange}
-            placeholder="Masukkan username"
-            className="w-full border border-gray-300 px-3 py-2 rounded text-sm outline-none focus:border-blue-400"
-          />
+          <div className="flex items-center gap-2 border border-gray-200 rounded-xl px-4 py-3 bg-gray-50 focus-within:ring-2 focus-within:ring-purple-300 transition-all">
+            <MdEmail className="text-gray-400" size={18} />
+            <input
+              type="email"
+              name="email"
+              placeholder="you@example.com"
+              value={form.email}
+              onChange={handleChange}
+              required
+              disabled={loading}
+              className="bg-transparent text-sm outline-none text-gray-700 w-full"
+            />
+          </div>
         </div>
 
-        {/* Password */}
-        <div className="mb-5">
-          <label className="block text-sm text-gray-700 mb-2">
-            Password
-          </label>
-
-          <div className="relative">
-            <input
-              type={showPassword ? "text" : "password"}
-              name="password"
-              value={dataForm.password}
-              onChange={handleChange}
-              placeholder="Masukkan password"
-              className="w-full border border-gray-300 px-3 py-2 rounded text-sm outline-none focus:border-blue-400 pr-10"
-            />
-
-            <button
-              type="button"
-              onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500"
-            >
-              {showPassword ? (
-                <MdVisibilityOff size={18} />
-              ) : (
-                <MdVisibility size={18} />
-              )}
-            </button>
-          </div>
-
-          <div className="text-right mt-2">
-            <Link
-              to="/forgot"
-              className="text-xs text-blue-500 hover:underline"
-            >
-              Lupa password?
+        <div>
+          <div className="flex items-center justify-between mb-1.5">
+            <label className="text-sm font-medium text-gray-700">Password</label>
+            <Link to="/forgot" className="text-xs text-purple-600 hover:underline">
+              Lupa Password?
             </Link>
           </div>
+          <div className="flex items-center gap-2 border border-gray-200 rounded-xl px-4 py-3 bg-gray-50 focus-within:ring-2 focus-within:ring-purple-300 transition-all">
+            <MdLock className="text-gray-400" size={18} />
+            <input
+              type="password"
+              name="password"
+              placeholder="••••••••"
+              value={form.password}
+              onChange={handleChange}
+              required
+              disabled={loading}
+              className="bg-transparent text-sm outline-none text-gray-700 w-full"
+            />
+          </div>
         </div>
 
-        {/* Button */}
         <button
           type="submit"
           disabled={loading}
-          className="w-full bg-blue-500 hover:bg-blue-600 text-white py-2 rounded text-sm transition"
+          className="w-full flex items-center justify-center gap-2 py-3 bg-[#7c4dff] hover:bg-[#6a3de0] text-white font-semibold rounded-xl transition-all disabled:opacity-60 shadow-md"
         >
-          {loading ? "Loading..." : "Login"}
+          {loading ? (
+            <>
+              <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+              Memverifikasi...
+            </>
+          ) : (
+            <>
+              <MdLogin size={18} />
+              Sign In
+            </>
+          )}
         </button>
       </form>
 
-      <p className="text-sm text-center text-gray-500 mt-5">
+      <p className="text-center text-sm text-gray-500 mt-6">
         Belum punya akun?{" "}
-        <Link
-          to="/register"
-          className="text-blue-500 hover:underline"
-        >
-          Daftar
+        <Link to="/register" className="text-[#7c4dff] font-semibold hover:underline">
+          Daftar di sini
         </Link>
       </p>
     </div>

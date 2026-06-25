@@ -11,38 +11,52 @@ const Services   = React.lazy(() => import("./pages/Services"));
 const Customers  = React.lazy(() => import("./pages/Customers"));
 const Marketing  = React.lazy(() => import("./pages/Marketing"));
 const Complaints = React.lazy(() => import("./pages/Complaints"));
+const User       = React.lazy(() => import("./pages/User"));
+const Components = React.lazy(() => import("./pages/Components"));
 const Login      = React.lazy(() => import("./pages/auth/Login"));
 const Register   = React.lazy(() => import("./pages/auth/Register"));
 const Forgot     = React.lazy(() => import("./pages/auth/Forgot"));
-const Components = React.lazy(() => import("./pages/Components"));
-const Account    = React.lazy(() => import("./pages/Account"));
+
+// Helper: cek apakah user sudah login
+function isLoggedIn() {
+  return !!localStorage.getItem("user");
+}
+
+// Protected route — harus login
+function ProtectedRoute({ children }) {
+  return isLoggedIn() ? children : <Navigate to="/login" replace />;
+}
+
+// Guest route — jika sudah login, langsung ke dashboard
+function GuestRoute({ children }) {
+  return isLoggedIn() ? <Navigate to="/" replace /> : children;
+}
 
 export default function App() {
   return (
-    // ✅ Suspense — tampilkan Loading saat komponen lazy sedang di-load
     <Suspense fallback={<Loading />}>
       <Routes>
-        {/* ── MainLayout: sidebar + header ── */}
-        <Route element={<MainLayout />}>
-          <Route path="/"            element={<Dashboard />}  />
-          <Route path="/orders"      element={<Orders />}     />
-          <Route path="/services"    element={<Services />}   />
-          <Route path="/customers"   element={<Customers />}  />
-          <Route path="/marketing"   element={<Marketing />}  />
-          <Route path="/complaints"  element={<Complaints />} />
-          <Route path="/components"  element={<Components />} />
-        </Route>
-
-        {/* ── AuthLayout: login, register, forgot ── */}
+        {/* Auth Layout — untuk login/register */}
         <Route element={<AuthLayout />}>
-          <Route path="/login"    element={<Login />} />
-          <Route path="/register" element={<Register />} />
+          <Route path="/login"    element={<GuestRoute><Login /></GuestRoute>} />
+          <Route path="/register" element={<GuestRoute><Register /></GuestRoute>} />
           <Route path="/forgot"   element={<Forgot />} />
         </Route>
 
-        {/* Fallback */}
+        {/* Main Layout — harus login */}
+        <Route element={<ProtectedRoute><MainLayout /></ProtectedRoute>}>
+          <Route path="/"           element={<Dashboard />}  />
+          <Route path="/orders"     element={<Orders />}     />
+          <Route path="/services"   element={<Services />}   />
+          <Route path="/customers"  element={<Customers />}  />
+          <Route path="/marketing"  element={<Marketing />}  />
+          <Route path="/complaints" element={<Complaints />} />
+          <Route path="/users"      element={<User />}       />
+          <Route path="/components" element={<Components />} />
+        </Route>
+
+        {/* Fallback — route tidak dikenal redirect ke login */}
         <Route path="*" element={<Navigate to="/login" replace />} />
-        <Route path="/account" element={<Account />} />
       </Routes>
     </Suspense>
   );

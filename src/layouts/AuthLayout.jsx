@@ -1,7 +1,10 @@
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 import { MdLocalLaundryService } from "react-icons/md";
 
 export default function AuthLayout() {
+  const location = useLocation();
+  const isRegister = location.pathname === "/register";
+
   return (
     <div className="min-h-screen bg-[#f6f4fb] flex items-center justify-center px-6 py-10">
       
@@ -154,11 +157,13 @@ export default function AuthLayout() {
               {/* Welcome */}
               <div className="mb-6">
                 <h2 className="text-3xl font-bold text-gray-800 mb-2">
-                  Welcome 👋
+                  {isRegister ? "Daftar Akun 🎉" : "Welcome 👋"}
                 </h2>
 
                 <p className="text-sm text-gray-400">
-                  Please login here
+                  {isRegister
+                    ? "Buat akun baru untuk mulai menggunakan LaundryPro"
+                    : "Please login here"}
                 </p>
               </div>
 
