@@ -1,143 +1,286 @@
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   MdLocalLaundryService,
   MdLogin,
   MdPersonAdd,
-  MdStar,
   MdCheckCircle,
-  MdLocalOffer,
   MdArrowForward,
   MdPhone,
   MdLocationOn,
+  MdEmail,
+  MdMenu,
+  MdClose,
+  MdStar,
   MdAccessTime,
-  MdWaterDrop,
-  MdIron,
-  MdLocalShipping,
+  MdLocalOffer,
+  MdSpeed,
+  MdVerified,
+  MdSupportAgent,
 } from "react-icons/md";
-import { FaCrown, FaMedal } from "react-icons/fa";
+import {
+  FaTshirt,
+  FaBolt,
+  FaShoePrints,
+  FaBed,
+} from "react-icons/fa";
 
-// ── Data prototype ────────────────────────────────────
-const services = [
-  { icon: <MdWaterDrop size={28} />, name: "Cuci Kiloan",      price: "Rp 7.000/kg",  desc: "Cuci bersih pakai detergen premium",       color: "bg-blue-50 text-blue-500"    },
-  { icon: <MdIron size={28} />,      name: "Cuci + Setrika",   price: "Rp 10.000/kg", desc: "Cuci bersih dan setrika rapi",              color: "bg-purple-50 text-purple-500" },
-  { icon: <MdLocalShipping size={28}/>,name: "Antar Jemput",   price: "Gratis",        desc: "Khusus member, radius 3km",                color: "bg-emerald-50 text-emerald-500"},
-  { icon: <MdStar size={28} />,      name: "Dry Cleaning",     price: "Rp 30.000/item",desc: "Perawatan ekstra untuk pakaian premium",   color: "bg-amber-50 text-amber-500"  },
+// ── PRD Data ─────────────────────────────────────────
+
+const navLinks = [
+  { label: "Tentang",  id: "tentang"  },
+  { label: "Layanan",  id: "layanan"  },
+  { label: "Kontak",   id: "kontak"   },
 ];
 
-const membershipTiers = [
+const keunggulan = [
+  { icon: <MdVerified   size={28} />, title: "Terpercaya",      desc: "Lebih dari 1.200 pelanggan aktif mempercayakan cucian mereka kepada kami sejak 2022.", color: "bg-purple-50 text-[#7c4dff]" },
+  { icon: <MdSpeed      size={28} />, title: "Cepat & Tepat",   desc: "Layanan express selesai dalam 2 jam. Pengerjaan reguler maksimal 1 hari kerja.",          color: "bg-blue-50 text-blue-500"    },
+  { icon: <MdAccessTime size={28} />, title: "Buka Setiap Hari",desc: "Kami beroperasi setiap hari pukul 08.00 – 21.00 WIB, termasuk hari libur nasional.",      color: "bg-emerald-50 text-emerald-500"},
+  { icon: <MdSupportAgent size={28}/>,title: "Layanan Pelanggan",desc: "Tim CS kami siap membantu melalui WhatsApp kapan saja Anda butuhkan.",                   color: "bg-pink-50 text-pink-500"    },
+];
+
+const services = [
   {
-    tier: "Bronze",
-    icon: <FaMedal className="text-amber-700" size={28} />,
-    color: "border-amber-200 bg-amber-50",
-    badge: "bg-amber-100 text-amber-700",
-    benefits: ["Poin reward setiap transaksi", "Notifikasi promo via WhatsApp", "Akses riwayat pesanan"],
-    minSpend: "Daftar gratis",
+    icon: <FaTshirt size={32} />,
+    name: "Laundry Reguler",
+    price: "Rp 7.000 / kg",
+    desc: "Layanan cuci dan lipat dengan detergen berkualitas. Selesai dalam 1 hari kerja. Cocok untuk pakaian harian.",
+    badge: "Terlaris",
+    badgeColor: "bg-[#7c4dff] text-white",
+    color: "bg-purple-50 text-[#7c4dff]",
+    border: "border-[#7c4dff]/20",
   },
   {
-    tier: "Silver",
-    icon: <FaMedal className="text-gray-400" size={28} />,
-    color: "border-gray-200 bg-gray-50",
-    badge: "bg-gray-100 text-gray-600",
-    benefits: ["Semua benefit Bronze", "Diskon 5% setiap transaksi", "Prioritas antrean"],
-    minSpend: "Total belanja Rp 500.000",
+    icon: <FaBolt size={32} />,
+    name: "Laundry Express",
+    price: "Rp 12.000 / kg",
+    desc: "Butuh cepat? Cucian Anda selesai dalam 2–3 jam. Proses prioritas dengan penanganan ekstra hati-hati.",
+    badge: "2–3 Jam",
+    badgeColor: "bg-[#ff6b81] text-white",
+    color: "bg-pink-50 text-[#ff6b81]",
+    border: "border-pink-200",
   },
   {
-    tier: "Gold",
-    icon: <FaCrown className="text-yellow-500" size={28} />,
-    color: "border-yellow-300 bg-yellow-50 ring-2 ring-yellow-200",
-    badge: "bg-yellow-100 text-yellow-700",
-    benefits: ["Semua benefit Silver", "Cashback 10%", "Antar jemput gratis", "Bonus poin 2x"],
-    minSpend: "Total belanja Rp 1.000.000",
-    popular: true,
+    icon: <FaShoePrints size={32} />,
+    name: "Cuci Sepatu",
+    price: "Rp 25.000 / pasang",
+    desc: "Pembersihan sepatu menyeluruh menggunakan sikat khusus dan cairan pembersih premium. Hasil bersih maksimal.",
+    badge: "Populer",
+    badgeColor: "bg-amber-500 text-white",
+    color: "bg-amber-50 text-amber-600",
+    border: "border-amber-200",
+  },
+  {
+    icon: <FaBed size={32} />,
+    name: "Bed Cover",
+    price: "Rp 20.000 / item",
+    desc: "Cuci bed cover, selimut, dan sprei besar secara menyeluruh. Bersih, wangi, dan bebas kuman.",
+    badge: "Tersedia",
+    badgeColor: "bg-emerald-500 text-white",
+    color: "bg-emerald-50 text-emerald-600",
+    border: "border-emerald-200",
   },
 ];
 
 const testimonials = [
-  { name: "Dewi L.",      rating: 5, text: "Baju selalu bersih dan wangi, delivery tepat waktu. Sudah 2 tahun setia pakai LaundryPro!",  tier: "Gold"   },
-  { name: "Andi W.",      rating: 5, text: "Sebagai member Gold, saya dapet cashback dan prioritas. Worth it banget!", tier: "Gold"   },
-  { name: "Budi S.",      rating: 4, text: "Harga terjangkau, kualitas oke. Aplikasinya juga gampang dipake.",          tier: "Bronze" },
+  { name: "Dewi Lestari",  initial: "D", rating: 5, text: "Cucian selalu bersih dan wangi, selesai tepat waktu. Sudah 2 tahun setia pakai LaundryPro!" },
+  { name: "Andi Wijaya",   initial: "A", rating: 5, text: "Layanan express-nya keren, 2 jam sudah beres. Sangat membantu saat hari sibuk!" },
+  { name: "Rina Marlina",  initial: "R", rating: 5, text: "Harga terjangkau, kualitas premium. Bed cover saya bersih banget setelah dicuci di sini." },
 ];
 
+// ── Komponen Utama ────────────────────────────────────
 export default function Guest() {
-  const navigate = useNavigate();
+  const navigate  = useNavigate();
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  const scrollTo = (id) => {
+    setMenuOpen(false);
+    document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+  };
 
   return (
-    <div className="min-h-screen bg-white font-sans">
+    <div className="min-h-screen bg-white font-sans text-gray-800 antialiased">
 
-      {/* ── NAVBAR ── */}
-      <nav className="bg-white border-b border-gray-100 sticky top-0 z-50 shadow-sm">
+      {/* ════════════════════════════════════════
+          TAHAP 1 — NAVBAR
+      ════════════════════════════════════════ */}
+      <header className="bg-white border-b border-gray-100 sticky top-0 z-50 shadow-sm">
         <div className="max-w-6xl mx-auto h-16 px-5 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="w-9 h-9 rounded-xl bg-[#7c4dff] flex items-center justify-center text-white shadow">
-              <MdLocalLaundryService size={18} />
+
+          {/* Logo */}
+          <div className="flex items-center gap-2.5">
+            <div className="w-9 h-9 rounded-xl bg-[#7c4dff] flex items-center justify-center text-white shadow-md shadow-[#7c4dff]/20">
+              <MdLocalLaundryService size={20} />
             </div>
-            <span className="font-bold text-lg text-gray-800">LaundryPro</span>
+            <span className="font-extrabold text-lg tracking-tight text-gray-800">
+              LaundryPro
+            </span>
           </div>
 
-          <div className="hidden md:flex items-center gap-6 text-sm font-medium text-gray-500">
-            <button onClick={() => document.getElementById("layanan")?.scrollIntoView({ behavior: "smooth" })} className="hover:text-[#7c4dff] transition-colors">Layanan</button>
-            <button onClick={() => document.getElementById("membership")?.scrollIntoView({ behavior: "smooth" })} className="hover:text-[#7c4dff] transition-colors">Membership</button>
-            <button onClick={() => document.getElementById("tentang")?.scrollIntoView({ behavior: "smooth" })} className="hover:text-[#7c4dff] transition-colors">Tentang Kami</button>
-          </div>
+          {/* Desktop Nav Links */}
+          <nav className="hidden md:flex items-center gap-7 text-sm font-medium text-gray-500">
+            {navLinks.map((link) => (
+              <button
+                key={link.id}
+                onClick={() => scrollTo(link.id)}
+                className="hover:text-[#7c4dff] transition-colors duration-200"
+              >
+                {link.label}
+              </button>
+            ))}
+          </nav>
 
-          <div className="flex items-center gap-3">
+          {/* CTA Buttons */}
+          <div className="hidden md:flex items-center gap-3">
             <button
               onClick={() => navigate("/login")}
-              className="flex items-center gap-1.5 px-4 py-2 text-sm font-semibold text-[#7c4dff] border border-[#7c4dff] rounded-xl hover:bg-purple-50 transition-all"
+              className="flex items-center gap-1.5 px-4 py-2 text-sm font-semibold text-[#7c4dff] border-2 border-[#7c4dff] rounded-xl hover:bg-[#7c4dff]/5 transition-all duration-200"
             >
-              <MdLogin size={16} /> Masuk
+              <MdLogin size={16} />
+              Login
             </button>
             <button
               onClick={() => navigate("/register")}
-              className="flex items-center gap-1.5 px-4 py-2 text-sm font-semibold text-white bg-[#7c4dff] hover:bg-[#693ce6] rounded-xl transition-all shadow-md"
+              className="flex items-center gap-1.5 px-4 py-2 text-sm font-semibold text-white bg-[#7c4dff] hover:bg-[#693ce6] rounded-xl transition-all duration-200 shadow-md shadow-[#7c4dff]/25"
             >
-              <MdPersonAdd size={16} /> Daftar
+              <MdPersonAdd size={16} />
+              Register
             </button>
           </div>
-        </div>
-      </nav>
 
-      {/* ── HERO ── */}
-      <section className="bg-gradient-to-br from-[#1a103c] via-[#2d1b6b] to-[#4c2ca7] text-white py-20 px-5 relative overflow-hidden">
-        <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute top-10 right-10 w-80 h-80 bg-[#7c4dff]/20 rounded-full blur-3xl" />
-          <div className="absolute bottom-0 left-10 w-60 h-60 bg-[#ff6b81]/10 rounded-full blur-3xl" />
+          {/* Mobile Hamburger */}
+          <button
+            className="md:hidden p-2 rounded-lg text-gray-500 hover:bg-gray-100 transition"
+            onClick={() => setMenuOpen(!menuOpen)}
+          >
+            {menuOpen ? <MdClose size={24} /> : <MdMenu size={24} />}
+          </button>
         </div>
-        <div className="max-w-6xl mx-auto relative z-10">
-          <div className="max-w-2xl">
-            <span className="inline-block bg-[#ff6b81] text-white text-xs font-bold px-3 py-1.5 rounded-full mb-4">
-              ✨ Laundry Premium Terpercaya
-            </span>
-            <h1 className="text-4xl md:text-5xl font-extrabold leading-tight mb-5">
-              Laundry Bersih, <br />
-              <span className="text-[#c4b5fd]">Hidup Lebih Ringan</span>
-            </h1>
-            <p className="text-base text-[#f0ebfa] opacity-90 mb-8 leading-relaxed">
-              LaundryPro hadir dengan layanan cuci, setrika, dan dry cleaning berkualitas tinggi. Daftar sebagai member dan nikmati reward eksklusif di setiap transaksi.
-            </p>
-            <div className="flex flex-wrap gap-4">
+
+        {/* Mobile Dropdown */}
+        {menuOpen && (
+          <div className="md:hidden bg-white border-t border-gray-100 px-5 py-4 space-y-3">
+            {navLinks.map((link) => (
               <button
-                onClick={() => navigate("/register")}
-                className="flex items-center gap-2 bg-[#7c4dff] hover:bg-[#693ce6] text-white font-bold px-6 py-3.5 rounded-xl transition-all shadow-lg shadow-[#7c4dff]/30"
+                key={link.id}
+                onClick={() => scrollTo(link.id)}
+                className="block w-full text-left text-sm font-medium text-gray-600 py-2 hover:text-[#7c4dff] transition-colors"
               >
-                <MdPersonAdd size={20} />
-                Daftar Sekarang — Gratis
+                {link.label}
               </button>
+            ))}
+            <div className="flex gap-3 pt-2 border-t border-gray-100">
               <button
                 onClick={() => navigate("/login")}
-                className="flex items-center gap-2 bg-white/10 hover:bg-white/20 border border-white/30 text-white font-semibold px-6 py-3.5 rounded-xl transition-all"
+                className="flex-1 py-2.5 text-sm font-semibold text-[#7c4dff] border-2 border-[#7c4dff] rounded-xl"
               >
-                <MdLogin size={20} />
-                Sudah Punya Akun?
+                Login
+              </button>
+              <button
+                onClick={() => navigate("/register")}
+                className="flex-1 py-2.5 text-sm font-semibold text-white bg-[#7c4dff] rounded-xl"
+              >
+                Register
+              </button>
+            </div>
+          </div>
+        )}
+      </header>
+
+      {/* ════════════════════════════════════════
+          TAHAP 2 — HERO SECTION
+      ════════════════════════════════════════ */}
+      <section className="relative bg-gradient-to-br from-[#1a103c] via-[#2d1b6b] to-[#4c2ca7] overflow-hidden">
+        {/* Background decoration */}
+        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[#7c4dff]/20 rounded-full blur-3xl -translate-y-1/3 translate-x-1/3" />
+        <div className="absolute bottom-0 left-0 w-72 h-72 bg-[#ff6b81]/10 rounded-full blur-3xl translate-y-1/3 -translate-x-1/4" />
+
+        {/* Floating card decoration — desktop only */}
+        <div className="hidden lg:block absolute right-16 top-1/2 -translate-y-1/2 w-72">
+          <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-5 space-y-3">
+            {/* Mini stats card */}
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-[#7c4dff] flex items-center justify-center text-white shrink-0">
+                <MdLocalLaundryService size={20} />
+              </div>
+              <div>
+                <p className="text-white font-bold text-sm">LaundryPro</p>
+                <p className="text-white/60 text-xs">Dashboard CRM</p>
+              </div>
+            </div>
+            <div className="grid grid-cols-2 gap-2">
+              {[["560","Total Cucian"],["1.050","Pesanan Masuk"],["470","Selesai"],["4.2Jt","Pendapatan"]].map(([v,l]) => (
+                <div key={l} className="bg-white/10 rounded-xl p-3">
+                  <p className="text-white font-extrabold text-base">{v}</p>
+                  <p className="text-white/60 text-[10px] mt-0.5">{l}</p>
+                </div>
+              ))}
+            </div>
+            <div className="flex justify-between items-end h-16 pt-2 border-t border-white/10">
+              {[60, 80, 50, 90, 70, 85, 45].map((h, i) => (
+                <div key={i} className="flex flex-col justify-end h-full flex-1 px-0.5">
+                  <div
+                    className="w-full rounded-full bg-gradient-to-t from-[#7c4dff] to-[#c4b5fd]"
+                    style={{ height: `${h}%` }}
+                  />
+                </div>
+              ))}
+            </div>
+            <p className="text-white/50 text-[10px] text-center">Laundry Overview — Minggu Ini</p>
+          </div>
+        </div>
+
+        <div className="max-w-6xl mx-auto px-5 py-20 md:py-28 relative z-10">
+          <div className="max-w-xl">
+            {/* Badge */}
+            <span className="inline-flex items-center gap-1.5 bg-[#ff6b81]/90 text-white text-xs font-bold px-3 py-1.5 rounded-full mb-5">
+              <MdLocalOffer size={14} />
+              Layanan Laundry Premium Terpercaya
+            </span>
+
+            {/* Headline — SESUAI PRD */}
+            <h1 className="text-4xl md:text-5xl font-extrabold text-white leading-tight mb-5">
+              Laundry Bersih,{" "}
+              <span className="text-[#c4b5fd]">Cepat</span>,{" "}
+              <br className="hidden md:block" />
+              dan{" "}
+              <span className="text-[#c4b5fd]">Terpercaya</span>
+            </h1>
+
+            {/* Deskripsi singkat */}
+            <p className="text-[#f0ebfa]/85 text-base leading-relaxed mb-8">
+              LaundryPro hadir untuk membantu Anda dengan layanan cuci berkualitas tinggi, pengerjaan tepat waktu, dan harga yang terjangkau. Nikmati kemudahan laundry profesional langsung dari genggaman Anda.
+            </p>
+
+            {/* CTA Buttons */}
+            <div className="flex flex-wrap gap-4 mb-10">
+              <button
+                onClick={() => navigate("/login")}
+                className="flex items-center gap-2 bg-white text-[#7c4dff] hover:bg-purple-50 font-bold px-7 py-3.5 rounded-xl transition-all shadow-lg"
+              >
+                <MdLogin size={18} />
+                Login
+              </button>
+              <button
+                onClick={() => navigate("/register")}
+                className="flex items-center gap-2 bg-[#7c4dff] hover:bg-[#693ce6] border-2 border-white/20 text-white font-bold px-7 py-3.5 rounded-xl transition-all shadow-lg shadow-[#7c4dff]/30"
+              >
+                <MdPersonAdd size={18} />
+                Register Sekarang
               </button>
             </div>
 
-            {/* Quick stats */}
-            <div className="flex flex-wrap gap-6 mt-10">
-              {[["1.200+","Pelanggan Aktif"], ["4.8★","Rating Kepuasan"], ["2 Jam","Layanan Express"]].map(([val, label]) => (
-                <div key={label}>
-                  <p className="text-xl font-black">{val}</p>
-                  <p className="text-xs text-[#f0ebfa] opacity-70 mt-0.5">{label}</p>
+            {/* Quick Stats */}
+            <div className="flex flex-wrap gap-6">
+              {[
+                ["1.200+", "Pelanggan Aktif"],
+                ["4.9 ★",  "Rating Kepuasan"],
+                ["2 Jam",  "Layanan Express"],
+              ].map(([val, label]) => (
+                <div key={label} className="flex flex-col">
+                  <span className="text-xl font-extrabold text-white">{val}</span>
+                  <span className="text-xs text-white/60 mt-0.5">{label}</span>
                 </div>
               ))}
             </div>
@@ -145,106 +288,115 @@ export default function Guest() {
         </div>
       </section>
 
-      {/* ── LAYANAN ── */}
-      <section id="layanan" className="py-16 px-5 bg-[#f6f4fb]">
+      {/* ════════════════════════════════════════
+          MIDDLE — TENTANG LAUNDRY
+      ════════════════════════════════════════ */}
+      <section id="tentang" className="py-20 px-5 bg-[#f6f4fb]">
         <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-10">
-            <h2 className="text-2xl md:text-3xl font-extrabold text-gray-800 mb-2">Layanan Kami</h2>
-            <p className="text-sm text-gray-500">Pilihan lengkap untuk kebutuhan laundry Anda</p>
-          </div>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
-            {services.map((s, i) => (
-              <div key={i} className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 hover:shadow-md hover:-translate-y-1 transition-all cursor-pointer text-center">
-                <div className={`w-14 h-14 rounded-xl ${s.color} flex items-center justify-center mx-auto mb-4`}>
-                  {s.icon}
-                </div>
-                <h3 className="font-bold text-gray-800 mb-1">{s.name}</h3>
-                <p className="text-xs text-gray-500 mb-3">{s.desc}</p>
-                <span className="text-sm font-black text-[#7c4dff]">{s.price}</span>
-              </div>
-            ))}
-          </div>
+          <div className="grid lg:grid-cols-2 gap-14 items-center">
 
-          <div className="text-center mt-8">
-            <button
-              onClick={() => navigate("/register")}
-              className="flex items-center gap-2 mx-auto bg-[#7c4dff] hover:bg-[#693ce6] text-white font-semibold px-6 py-3 rounded-xl transition-all"
-            >
-              Pesan Sekarang <MdArrowForward size={16} />
-            </button>
-          </div>
-        </div>
-      </section>
-
-      {/* ── MEMBERSHIP ── */}
-      <section id="membership" className="py-16 px-5 bg-white">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-10">
-            <h2 className="text-2xl md:text-3xl font-extrabold text-gray-800 mb-2">Program Membership</h2>
-            <p className="text-sm text-gray-500">Semakin sering laundry, semakin banyak keuntungan yang Anda dapatkan</p>
-          </div>
-          <div className="grid md:grid-cols-3 gap-6">
-            {membershipTiers.map((m) => (
-              <div
-                key={m.tier}
-                className={`rounded-2xl border-2 p-6 relative transition-all hover:shadow-lg ${m.color}`}
+            {/* Teks */}
+            <div>
+              <span className="inline-block bg-[#7c4dff]/10 text-[#7c4dff] text-xs font-bold px-3 py-1.5 rounded-full mb-4">
+                Tentang Kami
+              </span>
+              <h2 className="text-3xl md:text-4xl font-extrabold text-gray-800 leading-tight mb-4">
+                Mengapa Memilih{" "}
+                <span className="text-[#7c4dff]">LaundryPro</span>?
+              </h2>
+              <p className="text-gray-500 text-sm leading-relaxed mb-8">
+                LaundryPro adalah layanan laundry profesional yang berdiri sejak 2022 di Pekanbaru. Kami berkomitmen memberikan pengalaman laundry terbaik dengan teknologi modern, detergen premium ramah lingkungan, dan sistem manajemen digital yang transparan.
+              </p>
+              <button
+                onClick={() => navigate("/register")}
+                className="flex items-center gap-2 bg-[#7c4dff] hover:bg-[#693ce6] text-white font-semibold px-6 py-3 rounded-xl transition-all shadow-md shadow-[#7c4dff]/20"
               >
-                {m.popular && (
-                  <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#7c4dff] text-white text-[10px] font-bold px-3 py-1 rounded-full shadow">
-                    PALING POPULER
-                  </span>
-                )}
-                <div className="flex items-center gap-3 mb-4">
-                  {m.icon}
-                  <div>
-                    <h3 className="font-extrabold text-gray-800 text-lg">{m.tier}</h3>
-                    <span className={`text-[10px] font-bold px-2 py-0.5 rounded ${m.badge}`}>MEMBER</span>
-                  </div>
-                </div>
-                <p className="text-xs text-gray-500 mb-4 font-medium">{m.minSpend}</p>
-                <ul className="space-y-2 mb-6">
-                  {m.benefits.map((b, i) => (
-                    <li key={i} className="flex items-center gap-2 text-sm text-gray-600">
-                      <MdCheckCircle className="text-[#7c4dff] shrink-0" size={16} />
-                      {b}
-                    </li>
-                  ))}
-                </ul>
-                <button
-                  onClick={() => navigate("/register")}
-                  className={`w-full py-2.5 rounded-xl font-semibold text-sm transition-all flex items-center justify-center gap-2 ${
-                    m.popular
-                      ? "bg-[#7c4dff] text-white hover:bg-[#693ce6] shadow-md"
-                      : "border border-gray-200 text-gray-700 hover:bg-gray-100"
-                  }`}
+                Mulai Sekarang <MdArrowForward size={16} />
+              </button>
+            </div>
+
+            {/* Keunggulan Grid */}
+            <div className="grid grid-cols-2 gap-4">
+              {keunggulan.map((k, i) => (
+                <div
+                  key={i}
+                  className="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all"
                 >
-                  Daftar {m.tier} <MdArrowForward size={14} />
-                </button>
-              </div>
-            ))}
+                  <div className={`w-12 h-12 rounded-xl ${k.color} flex items-center justify-center mb-3`}>
+                    {k.icon}
+                  </div>
+                  <h3 className="font-bold text-gray-800 text-sm mb-1">{k.title}</h3>
+                  <p className="text-xs text-gray-500 leading-relaxed">{k.desc}</p>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
 
-      {/* ── PROMO BANNER ── */}
-      <section className="py-12 px-5 bg-gradient-to-r from-[#7c4dff] to-[#9c6bff]">
-        <div className="max-w-4xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6 text-white text-center md:text-left">
-          <div>
-            <div className="flex items-center gap-2 justify-center md:justify-start mb-2">
-              <MdLocalOffer size={22} />
-              <span className="font-bold text-lg">Promo Spesial Sekarang!</span>
-            </div>
-            <p className="text-sm text-purple-100">
-              Daftar hari ini dan dapatkan <strong>diskon 20%</strong> untuk 3 transaksi pertama Anda.
+      {/* ════════════════════════════════════════
+          TAHAP 3 — INFORMASI LAYANAN
+      ════════════════════════════════════════ */}
+      <section id="layanan" className="py-20 px-5 bg-white">
+        <div className="max-w-6xl mx-auto">
+          {/* Header */}
+          <div className="text-center mb-12">
+            <span className="inline-block bg-[#7c4dff]/10 text-[#7c4dff] text-xs font-bold px-3 py-1.5 rounded-full mb-3">
+              Layanan Kami
+            </span>
+            <h2 className="text-3xl md:text-4xl font-extrabold text-gray-800 mb-3">
+              Pilihan Layanan Lengkap
+            </h2>
+            <p className="text-sm text-gray-500 max-w-md mx-auto">
+              Kami menyediakan berbagai layanan laundry untuk memenuhi semua kebutuhan Anda.
             </p>
           </div>
-          <button
-            onClick={() => navigate("/register")}
-            className="bg-white text-[#7c4dff] font-bold px-6 py-3 rounded-xl hover:bg-purple-50 transition-all shadow-lg shrink-0 flex items-center gap-2"
-          >
-            <MdPersonAdd size={18} />
-            Klaim Sekarang
-          </button>
+
+          {/* Service Cards — 4 layanan sesuai PRD */}
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {services.map((s, i) => (
+              <div
+                key={i}
+                className={`group bg-white rounded-2xl border-2 ${s.border} p-6 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 flex flex-col`}
+              >
+                {/* Badge */}
+                <div className="flex justify-between items-start mb-4">
+                  <div className={`w-14 h-14 rounded-2xl ${s.color} flex items-center justify-center`}>
+                    {s.icon}
+                  </div>
+                  <span className={`text-[10px] font-bold px-2.5 py-1 rounded-full ${s.badgeColor}`}>
+                    {s.badge}
+                  </span>
+                </div>
+                <h3 className="font-extrabold text-gray-800 text-base mb-2">{s.name}</h3>
+                <p className="text-xs text-gray-500 leading-relaxed flex-1 mb-4">{s.desc}</p>
+                <div className="border-t border-gray-100 pt-4">
+                  <p className="text-lg font-extrabold text-[#7c4dff]">{s.price}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* CTA bawah layanan */}
+          <div className="text-center mt-10">
+            <p className="text-sm text-gray-500 mb-4">Tertarik menggunakan layanan kami?</p>
+            <div className="flex flex-wrap gap-3 justify-center">
+              <button
+                onClick={() => navigate("/register")}
+                className="flex items-center gap-2 bg-[#7c4dff] hover:bg-[#693ce6] text-white font-semibold px-6 py-3 rounded-xl transition-all shadow-md"
+              >
+                <MdPersonAdd size={16} />
+                Daftar & Pesan Sekarang
+              </button>
+              <button
+                onClick={() => navigate("/login")}
+                className="flex items-center gap-2 border-2 border-[#7c4dff] text-[#7c4dff] font-semibold px-6 py-3 rounded-xl hover:bg-[#7c4dff]/5 transition-all"
+              >
+                <MdLogin size={16} />
+                Login untuk Pesan
+              </button>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -257,25 +409,22 @@ export default function Guest() {
           </div>
           <div className="grid md:grid-cols-3 gap-5">
             {testimonials.map((t, i) => (
-              <div key={i} className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+              <div key={i} className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
                 <div className="flex gap-0.5 mb-3">
                   {[...Array(t.rating)].map((_, j) => (
                     <MdStar key={j} className="text-yellow-400" size={16} />
                   ))}
                 </div>
-                <p className="text-sm text-gray-600 italic mb-4">"{t.text}"</p>
-                <div className="flex items-center gap-3">
-                  <div className="w-9 h-9 rounded-full bg-[#f4f1fb] flex items-center justify-center font-bold text-[#7c4dff] text-sm">
-                    {t.name.charAt(0)}
+                <p className="text-sm text-gray-600 italic leading-relaxed mb-5">"{t.text}"</p>
+                <div className="flex items-center gap-3 border-t border-gray-50 pt-4">
+                  <div className="w-9 h-9 rounded-full bg-[#f4f1fb] flex items-center justify-center font-bold text-[#7c4dff] text-sm shrink-0">
+                    {t.initial}
                   </div>
                   <div>
                     <p className="font-semibold text-gray-800 text-sm">{t.name}</p>
-                    <span className={`text-[10px] font-bold px-2 py-0.5 rounded ${
-                      t.tier === "Gold" ? "bg-yellow-100 text-yellow-700" : "bg-amber-50 text-amber-700"
-                    }`}>
-                      {t.tier === "Gold" ? "🥇" : "🥉"} {t.tier} Member
-                    </span>
+                    <p className="text-xs text-gray-400">Pelanggan LaundryPro</p>
                   </div>
+                  <MdCheckCircle className="text-emerald-500 ml-auto shrink-0" size={18} />
                 </div>
               </div>
             ))}
@@ -283,70 +432,118 @@ export default function Guest() {
         </div>
       </section>
 
-      {/* ── TENTANG KAMI ── */}
-      <section id="tentang" className="py-16 px-5 bg-white">
-        <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-2xl md:text-3xl font-extrabold text-gray-800 mb-4">Tentang LaundryPro</h2>
-          <p className="text-gray-500 text-sm leading-relaxed mb-8 max-w-2xl mx-auto">
-            LaundryPro adalah layanan laundry profesional yang berdiri sejak 2023. Kami berkomitmen memberikan layanan cuci terbaik dengan teknologi modern, detergen premium, dan sistem manajemen digital untuk kepuasan pelanggan.
-          </p>
-          <div className="grid sm:grid-cols-3 gap-5 mb-10">
-            {[
-              { icon: <MdLocationOn className="text-[#7c4dff]" size={24} />, label: "Lokasi", value: "Pekanbaru, Riau" },
-              { icon: <MdPhone className="text-[#7c4dff]" size={24} />,      label: "WhatsApp", value: "0812-3456-7890" },
-              { icon: <MdAccessTime className="text-[#7c4dff]" size={24} />, label: "Jam Buka", value: "08.00 – 21.00 WIB" },
-            ].map((c) => (
-              <div key={c.label} className="bg-[#f6f4fb] rounded-2xl p-5 flex flex-col items-center gap-2">
-                {c.icon}
-                <p className="text-xs text-gray-400 font-medium">{c.label}</p>
-                <p className="font-bold text-gray-700 text-sm">{c.value}</p>
-              </div>
-            ))}
-          </div>
+      {/* ════════════════════════════════════════
+          BOTTOM — CALL TO ACTION
+      ════════════════════════════════════════ */}
+      <section className="py-20 px-5 bg-gradient-to-br from-[#1a103c] via-[#2d1b6b] to-[#4c2ca7] relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-96 h-96 bg-[#7c4dff]/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3" />
+        <div className="absolute bottom-0 left-0 w-64 h-64 bg-[#ff6b81]/10 rounded-full blur-3xl translate-y-1/2 -translate-x-1/4" />
 
-          {/* CTA */}
-          <div className="bg-gradient-to-br from-[#1a103c] to-[#4c2ca7] text-white rounded-2xl p-8">
-            <h3 className="text-xl font-extrabold mb-2">Siap Bergabung?</h3>
-            <p className="text-sm text-[#f0ebfa] opacity-90 mb-6">
-              Daftar gratis sekarang dan mulai nikmati layanan laundry premium dengan keuntungan member.
-            </p>
-            <div className="flex gap-4 justify-center flex-wrap">
-              <button
-                onClick={() => navigate("/register")}
-                className="flex items-center gap-2 bg-[#7c4dff] hover:bg-[#693ce6] text-white font-bold px-6 py-3 rounded-xl transition-all shadow-md"
-              >
-                <MdPersonAdd size={18} />
-                Daftar Gratis
-              </button>
-              <button
-                onClick={() => navigate("/login")}
-                className="flex items-center gap-2 bg-white/10 hover:bg-white/20 border border-white/30 text-white font-semibold px-6 py-3 rounded-xl transition-all"
-              >
-                <MdLogin size={18} />
-                Login
-              </button>
-            </div>
+        <div className="max-w-3xl mx-auto text-center relative z-10">
+          <span className="inline-block bg-white/10 border border-white/20 text-white text-xs font-bold px-3 py-1.5 rounded-full mb-5">
+            🎉 Bergabung Sekarang
+          </span>
+          <h2 className="text-3xl md:text-4xl font-extrabold text-white leading-tight mb-4">
+            Daftar Sekarang dan Nikmati{" "}
+            <span className="text-[#c4b5fd]">Layanan Laundry</span>{" "}
+            yang Praktis
+          </h2>
+          <p className="text-[#f0ebfa]/80 text-sm leading-relaxed mb-8 max-w-xl mx-auto">
+            Bergabung dengan ribuan pelanggan LaundryPro dan rasakan kemudahan mencuci tanpa repot. Daftar gratis sekarang dan dapatkan diskon 20% untuk transaksi pertama Anda!
+          </p>
+          <div className="flex flex-wrap gap-4 justify-center">
+            <button
+              onClick={() => navigate("/register")}
+              className="flex items-center gap-2 bg-white text-[#7c4dff] hover:bg-purple-50 font-extrabold px-8 py-4 rounded-xl transition-all shadow-xl text-sm"
+            >
+              <MdPersonAdd size={20} />
+              Daftar Gratis Sekarang
+            </button>
+            <button
+              onClick={() => navigate("/login")}
+              className="flex items-center gap-2 bg-white/10 hover:bg-white/20 border border-white/30 text-white font-semibold px-8 py-4 rounded-xl transition-all text-sm"
+            >
+              <MdLogin size={20} />
+              Sudah Punya Akun? Login
+            </button>
           </div>
         </div>
       </section>
 
-      {/* ── FOOTER ── */}
-      <footer className="border-t border-gray-100 bg-white">
-        <div className="max-w-6xl mx-auto px-5 py-8 flex flex-col md:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-2">
-            <div className="w-6 h-6 rounded-full bg-[#7c4dff] flex items-center justify-center text-white">
-              <MdLocalLaundryService size={12} />
+      {/* ════════════════════════════════════════
+          TAHAP 4 — FOOTER
+      ════════════════════════════════════════ */}
+      <footer id="kontak" className="bg-[#0f0a24] text-white">
+        <div className="max-w-6xl mx-auto px-5 py-14">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-10 mb-12">
+
+            {/* Brand */}
+            <div className="lg:col-span-2">
+              <div className="flex items-center gap-2.5 mb-4">
+                <div className="w-9 h-9 rounded-xl bg-[#7c4dff] flex items-center justify-center shadow-md shadow-[#7c4dff]/30">
+                  <MdLocalLaundryService size={20} />
+                </div>
+                <span className="font-extrabold text-lg tracking-tight">LaundryPro</span>
+              </div>
+              <p className="text-white/60 text-sm leading-relaxed max-w-xs">
+                Layanan laundry profesional dengan kualitas terbaik, harga terjangkau, dan pengerjaan tepat waktu. Kepuasan Anda adalah prioritas kami.
+              </p>
             </div>
-            <span className="font-bold text-sm text-gray-800">LaundryPro</span>
-            <span className="text-xs text-gray-400 ml-2">© {new Date().getFullYear()}</span>
+
+            {/* Layanan */}
+            <div>
+              <h4 className="font-bold text-sm mb-4 text-white/90">Layanan</h4>
+              <ul className="space-y-2.5 text-sm text-white/60">
+                {["Laundry Reguler","Laundry Express","Cuci Sepatu","Bed Cover"].map((l) => (
+                  <li key={l}>
+                    <button
+                      onClick={() => scrollTo("layanan")}
+                      className="hover:text-[#c4b5fd] transition-colors"
+                    >
+                      {l}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Kontak — sesuai PRD: Alamat, Telepon, Email */}
+            <div>
+              <h4 className="font-bold text-sm mb-4 text-white/90">Kontak</h4>
+              <ul className="space-y-3 text-sm text-white/60">
+                <li className="flex items-start gap-2.5">
+                  <MdLocationOn className="text-[#7c4dff] shrink-0 mt-0.5" size={16} />
+                  <span>Jl. Sudirman No. 45, Pekanbaru, Riau 28111</span>
+                </li>
+                <li className="flex items-center gap-2.5">
+                  <MdPhone className="text-[#7c4dff] shrink-0" size={16} />
+                  <span>0812-3456-7890</span>
+                </li>
+                <li className="flex items-center gap-2.5">
+                  <MdEmail className="text-[#7c4dff] shrink-0" size={16} />
+                  <span>halo@laundrypro.id</span>
+                </li>
+                <li className="flex items-center gap-2.5">
+                  <MdAccessTime className="text-[#7c4dff] shrink-0" size={16} />
+                  <span>08.00 – 21.00 WIB (Setiap hari)</span>
+                </li>
+              </ul>
+            </div>
           </div>
-          <div className="flex gap-5 text-xs text-gray-400 font-medium">
-            <button className="hover:text-[#7c4dff] transition-colors">Kebijakan Privasi</button>
-            <button className="hover:text-[#7c4dff] transition-colors">Syarat & Ketentuan</button>
-            <button className="hover:text-[#7c4dff] transition-colors">Hubungi Kami</button>
+
+          {/* Bottom bar — Copyright */}
+          <div className="border-t border-white/10 pt-6 flex flex-col sm:flex-row items-center justify-between gap-3">
+            <p className="text-xs text-white/40">
+              © {new Date().getFullYear()} LaundryPro. Hak Cipta Dilindungi.
+            </p>
+            <div className="flex gap-5 text-xs text-white/40">
+              <button className="hover:text-white/70 transition-colors">Kebijakan Privasi</button>
+              <button className="hover:text-white/70 transition-colors">Syarat & Ketentuan</button>
+            </div>
           </div>
         </div>
       </footer>
+
     </div>
   );
 }
